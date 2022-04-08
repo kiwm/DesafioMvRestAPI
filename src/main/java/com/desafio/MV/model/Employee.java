@@ -4,6 +4,7 @@ package com.desafio.MV.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.GeneratorType;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,11 +21,11 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique=true)
+    @Column(unique = true)
     private String cpf;
 
     private String name;
+
     @Column(unique = true)
-    @ElementCollection(targetClass=String.class)
-    private List<String> list;
+    private String list;
 }

@@ -5,7 +5,6 @@ import com.desafio.MV.model.Employee;
 import com.desafio.MV.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -16,28 +15,36 @@ public class EmployeeService {
     EmployeeRepository employeeRepository;
 
     public Employee saveEmployee(Employee employee) {
+
         return employeeRepository.save(employee);
     }
 
     public List<Employee> getEmployees() {
+
         return employeeRepository.findAll();
     }
 
-    public void deleteEmployee(Long id) {
+    public Optional<Employee> findById(Long id) {
+
         Optional<Employee> employee = employeeRepository.findById(id);
-        if(employee.isPresent()) {
+        if (employee.isPresent()) {
+            return employeeRepository.findById(id);
+        }
+        throw new ResourceNotFoundException("Employee", "Id", id);
+    }
+
+    public void deleteEmployee(Long id) {
+
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if (employee.isPresent()) {
             employeeRepository.deleteById(id);
         } else {
-            throw new ResourceNotFoundException("Employee", "Id", id) ;
+            throw new ResourceNotFoundException("Employee", "Id", id);
         }
     }
 
-    public Employee updateEmployee(Long id, Employee employee) {
-        employee.setId(id);
-        Optional<Employee> employeeTest = employeeRepository.findById(id);
-        if (employeeTest.isPresent()) {
-            return employeeRepository.save(employee);
-        }
-        throw new ResourceNotFoundException("Employee", "Id", id);
+    public Employee updateEmployee(Employee employee) {
+
+        return employeeRepository.save(employee);
     }
 }

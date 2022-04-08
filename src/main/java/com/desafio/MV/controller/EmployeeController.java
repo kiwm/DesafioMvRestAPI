@@ -14,10 +14,8 @@ import java.util.List;
 @CrossOrigin("*")
 public class EmployeeController {
 
-
     @Autowired
     private EmployeeService employeeService;
-
 
     @PostMapping("/employees")
     public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee) {
@@ -29,15 +27,19 @@ public class EmployeeController {
         return employeeService.getEmployees();
     }
 
-    @DeleteMapping("/employees/{id}")
-    public ResponseEntity<String> deleteEmployee(@PathVariable("id") long id) {
-        employeeService.deleteEmployee(id);
-
-        return new ResponseEntity<String>("Employee deleted successfully!.", HttpStatus.OK);
+    @GetMapping("/employees/{id}")
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
+        return new ResponseEntity<Employee>(employeeService.findById(id).get(), HttpStatus.OK);
     }
 
-    @PutMapping("/employees/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable long id, @RequestBody Employee employee) {
-        return new ResponseEntity<Employee>(employeeService.updateEmployee(id, employee), HttpStatus.OK);
+    @DeleteMapping("/employees/{id}")
+    public ResponseEntity<String> deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployee(id);
+        return new ResponseEntity<String>("Employee deleted successfully!.", HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/employees")
+    public ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee) {
+        return new ResponseEntity<Employee>(employeeService.updateEmployee(employee), HttpStatus.OK);
     }
 }
